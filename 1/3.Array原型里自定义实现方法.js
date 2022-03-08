@@ -16,10 +16,27 @@ Array.prototype.mapByReduce = function (callBack, ctx) {
   }, [])
 }
 
+Array.prototype.myMap = function (callBack, cts) {
+  if (typeof callBack !== 'function') {
+    throw new Error('callBack must be a function')
+  }
+  let result = []
+  for (let i = 0; i < this.length; i++) {
+    let value = callBack.call(cts, this[i], i, this)
+    result = [...result, value]
+  }
+  return result
+}
+
 // let mapF = f.mapByReduce((item, index) => {
 //   return { [item]: index }
 // })
 // console.log(mapF) // [ { '1': 0 }, { '2': 1 } ]
+
+// let fns = f.myMap((item, index) => {
+//   return { [item]: index }
+// })
+// console.log(fns)
 
 ////// filter
 // 此方法是将所有元素进行判断，将满足条件的元素作为一个新的数组返回
@@ -36,8 +53,28 @@ Array.prototype.filterByReduce = function (callBack, ctx) {
   }, [])
 }
 
+Array.prototype.myFilter = function(callBack, cts) {
+  if (typeof callBack !== 'function') {
+    throw new Error('callBack must be a function')
+  }
+  let result = []
+  for (let i = 0; i < this.length; i++) {
+    let value = callBack.call(cts, this[i], i, this)
+    if (value) {
+      result = [...result, this[i]]
+    }
+  }
+  return result
+}
+
 // let f1 = f.filterByReduce((item) => item > 2)
 // console.log(f1) // [3,4,5]
+
+// let f1 = f.myFilter((item) => {
+//   return item % 2
+// })
+
+// console.log(f1) // [ 1, 3, 5 ]
 
 ////// forEach
 // 此方法是将数组中的每个元素执行传进提供的函数，没有返回值，注意和map方法区分
@@ -114,9 +151,7 @@ Array.prototype.myReduce = function (callBack, initValue, ctx) {
 
 // console.log(va)
 
-
 ////// push pop shift unshift
-
 
 ////// slice(?:start, ?:end) 不改变原数组
 
